@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="initialize-request-data" doc:id="6335f9bd-aad6-4cda-b4bc-af2de6392785" >
+		<ee:transform doc:name="Transform Message" doc:id="de0bf931-9d9b-4590-87c2-01da1ab4f418">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="requestVar"><![CDATA[%dw 2.0
+output application/json
+---
+{
+	payload : payload default "",
+	queryParam : attributes.queryParams default "",
+	uriParams : attributes.uriParams default "",
+	headers : attributes.headers default "",
+	startTime : (now() >> "IST") as String {format: "yyyy-MM-dd hh:mm:SS"}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+</mule>

@@ -1,0 +1,12 @@
+#%RAML 1.0 Library
+usage:
+traits:
+  authorization-header: !include traits/authorization-header-trait.raml
+  contentType-header: !include traits/contentType-header-trait.raml
+  transaction-header: !include traits/transaction-header-trait.raml
+  featureName-queryparam: !include traits/featureName-queryParam-trait.raml
+  error-response-trait: !include traits/error-response-trait.raml
+
+types:
+  policyList-response: !include datatype/policyList-response-dataType.raml
+  success-response: !include datatype/success-response-dataType.raml

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="get-policy-list-implFlow" doc:id="f93904ba-899a-4ddc-b4cf-f7336ac101c2" >
+		<set-variable value="#[&quot;SELECT * FROM policyList WHERE voicId = '&quot; ++ vars.requestVar.queryParam.voicId ++ &quot;'&quot;]" doc:name="Set Variable" doc:id="83031c06-0678-4f0a-a8d8-d86d1649fbfc" variableName="sqlQuery"/>
+		<logger level="INFO" doc:name="Request Logger" doc:id="0d5f41aa-c804-4d0a-9027-25b8e16e548b" message="#[%dw 2.0&#10;output application/json indent = false&#10;---	&#10;{&#10;	timestamp: (now() &gt;&gt; &quot;IST&quot;) as String {format: &quot;yyyy-MM-dd hh:mm:SS&quot;},&#10;	transactionId: vars.requestVar.headers.'x-abc-msgid',&#10;	appName: app.name,&#10;	flowName: flow.name,&#10;	businessProcessName: &quot;Policy List&quot;,&#10;	originatingApplication: &quot;FrontEnd&quot;,&#10;	destinationApplication: &quot;DataBase&quot;,&#10;	sqlQuery: vars.sqlQuery,&#10;	customerIdentifier: &quot;NA&quot;,&#10;	txnStatae: &quot;Before DB call&quot;&#10;	&#10;}]"/>
+		<db:select doc:name="Select" doc:id="11f21369-c533-42cd-8b87-79643a15ea72" config-ref="Database_Config">
+			<db:sql ><![CDATA[#[vars.sqlQuery]]]></db:sql>
+		</db:select>
+		<logger level="INFO" doc:name="Response Logger" doc:id="d336946b-03b6-43ed-8f52-ba357b616f0a" />
+	</sub-flow>
+</mule>
