@@ -1,0 +1,10 @@
+{
+  "msg": "failed operation",
+  "code": 401,
+  "eventId": "weduwedh-wdsah-wdwdds-edd-sqs",
+  "error": {
+    "type": "Un-Authorized",
+    "title": "unAuthorized",
+    "details": "The Request is not Authorized"
+  }
+}

@@ -1,0 +1,45 @@
+#%RAML 1.0
+title: claim-xpapi-raml
+baseUri: "/api/voic"
+version: 1.0.0
+
+uses:
+  common-library : /exchange_modules/809f70b1-cade-407c-a272-873457bbcd5f/common-fragment/1.0.3/common-fragment.raml
+
+
+securitySchemes:
+  oAuth:
+    type: OAuth 2.0
+
+/policies:
+  get:
+    description: "This API retrieve details in VOIC app"
+    is:
+      - common-library.authorization-header
+      - common-library.transaction-header
+      - common-library.contentType-header
+      - common-library.featureName-queryparam
+      - common-library.error-response-trait
+    responses:
+      200:
+        body:
+          application/json:
+            type: common-library.policyList-response
+
+/health-check:
+  get:
+    description : "This API will be used to check health of application"
+    is:
+      - common-library.authorization-header
+      - common-library.transaction-header
+      - common-library.error-response-trait
+    responses:
+      200:
+        body:
+          application/json:
+            type: common-library.success-response
+
+            
+            
+
+                             
