@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>809f70b1-cade-407c-a272-873457bbcd5f</groupId>
 			<artifactId>claim-papi-raml</artifactId>
-			<version>1.0.3</version>
+			<version>1.0.4</version>
 			<classifier>raml</classifier>
 			<type>zip</type>
 		</dependency>

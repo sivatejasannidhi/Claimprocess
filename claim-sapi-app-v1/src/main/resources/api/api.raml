@@ -4,7 +4,7 @@ baseUri: "/api/voic"
 version: 1.0.0
 
 uses:
-  common-library : /exchange_modules/809f70b1-cade-407c-a272-873457bbcd5f/common-fragment/1.0.3/common-fragment.raml
+  common-library : /exchange_modules/809f70b1-cade-407c-a272-873457bbcd5f/common-fragment/1.0.4/common-fragment.raml
 
 
 /policies:
@@ -13,7 +13,7 @@ uses:
     is:
       - common-library.transaction-header
       - common-library.contentType-header
-      - common-library.featureName-queryparam
+      - common-library.voicId
       - common-library.error-response-trait
     responses:
       200:
