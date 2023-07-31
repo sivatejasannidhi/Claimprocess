@@ -17,7 +17,8 @@ output application/json
 	queryParam : attributes.queryParams default "",
 	uriParams : attributes.uriParams default "",
 	headers : attributes.headers default "",
-	startTime : now() >> "IST" as String {format: "yyyy-MM-dd'T'HH:mm:ss.SSS"}
+	startTime: now() as LocalDateTime {format: "yyyy-MM-dd HH:mm:ss.SSS"}
+
 }]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>

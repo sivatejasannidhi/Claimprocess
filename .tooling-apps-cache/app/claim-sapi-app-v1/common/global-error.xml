@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
 	<error-handler name="global-errorError_Handler" doc:id="3612d742-2f0f-4abf-bbdb-76d416c17d67">
 	   <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform doc:name="Transform Message">
@@ -88,4 +89,48 @@ output application/json
 	
 	
 </error-handler>
+	<error-handler name="global-errorError_Handler_flow" doc:id="2a9f35bc-ab7c-4a28-a84d-067f6d084d8c" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="dc7a7f21-1c14-4237-b8af-138634164d80" type="DB:BAD_SQL_SYNTAX, DB:CONNECTIVITY, DB:QUERY_EXECUTION, DB:RETRY_EXHAUSTED" >
+			<logger level="INFO" doc:name="Error Logger" doc:id="fcb6627a-968a-4fd8-a9a2-fc1eb6756dbd" message="#[%dw 2.0&#10;output application/json indent = false&#10;---&#10;{&#10;	timestamp: (now() &gt;&gt; &quot;IST&quot;) as String {format: &quot;yyyy-MM-dd hh:mm:SS&quot;},&#10;	transactionId: vars.requestVar.headers.'x-abc-msgid',&#10;	appName: app.name,&#10;	flowName: flow.name,&#10;	businessProcessName: &quot;policy&quot;,&#10;	originatingApplication: &quot;External system&quot;,&#10;	destinationApplication: &quot;NA&quot;,&#10;	customerIdentifier: &quot;NA&quot;,&#10;	txnState: &quot;End Log&quot;,&#10;	errorType: error.errorType,&#10;	errorDescription: error.description&#10;}]"/>
+			<ee:transform doc:name="Transform Message" doc:id="23e70d88-2eb9-4742-a6e9-33ceb6f0c940" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "msg": "failed operation",
+  "code": 500,
+  "eventId":  vars.requestVar.headers.'x-abc-msgid',
+  "error": {
+    "type": error.errorType,
+    "title": "DB_ERROR",
+    "details":  error.description,
+   
+  }
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="41eb3a84-ca13-41dd-bba3-dc473152f7cf" >
+			<logger level="INFO" doc:name="Error Logger" doc:id="28d81b22-b1d1-4bc0-9a42-faf4a57635f9" message="#[%dw 2.0&#10;output application/json indent = false&#10;---&#10;{&#10;	timestamp: (now() &gt;&gt; &quot;IST&quot;) as String {format: &quot;yyyy-MM-dd hh:mm:SS&quot;},&#10;	transactionId: vars.requestVar.headers.'x-abc-msgid',&#10;	appName: app.name,&#10;	flowName: flow.name,&#10;	businessProcessName: &quot;policy&quot;,&#10;	originatingApplication: &quot;External system&quot;,&#10;	destinationApplication: &quot;NA&quot;,&#10;	customerIdentifier: &quot;NA&quot;,&#10;	txnState: &quot;End Log&quot;,&#10;	errorType: error.errorType,&#10;	errorDescription: error.description&#10;}]" />
+			<ee:transform doc:name="Transform Message" doc:id="22ded13e-7492-4fbf-97ad-555eb50cfbf6">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "msg": "failed operation",
+  "code": 500,
+  "eventId":  vars.requestVar.headers.'x-abc-msgid',
+  "error": {
+    "type": error.errorType,
+    "title": "System_Error",
+    "details":  error.description,
+   
+  }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		</on-error-propagate>
+	</error-handler>
 </mule>

@@ -13,7 +13,7 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
     </http:listener-config>
     <apikit:config name="api-config" api="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="d4e5eabd-ec55-44dd-acb4-aa83ca6c3d1b" >
-		<db:my-sql-connection host="${db.host}" port="${db.port}" user="${db.username}" password="${secure::db.password}" database="${db.database}" />
+		<db:my-sql-connection host="${db.host}" port="${db.port}" user="${db.username}" password="${secure::db.password}" database="${db.database}" useXaTransactions="true"/>
 	</db:config>
 	<configuration-properties doc:name="Configuration properties" doc:id="4e78994f-5e13-4426-a517-41ea451ab49f" file="properties/${mule.env}.yaml" />
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="9e10a527-3a17-49a0-bfa1-bbba4079c39c" file="properties/${mule.env}.yaml" key="${mule.secretKey}">
