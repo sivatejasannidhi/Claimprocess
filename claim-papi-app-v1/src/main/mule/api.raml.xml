@@ -10,7 +10,8 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="api-config" />
+        <logger level="INFO" doc:name="Initial Logger" doc:id="ac21a44e-cdb0-4a49-a1ee-9e40e341d8ac" message="#[%dw 2.0&#10;output application/json indent = false&#10;---&#10;{&#10;	timestamp: (now() &gt;&gt; &quot;IST&quot;) as String {format: &quot;yyyy-MM-dd&quot;},&#10;	transactionId: attributes.headers.'x-abc-msgid',&#10;	appName: app.name,&#10;	flowName: flow.name,&#10;	businessProcessName: &quot;HealthCheck&quot;,&#10;	originatingApplication: &quot;External system&quot;,&#10;	destinationApplication: &quot;NA&quot;,&#10;	customerIdentifier: &quot;NA&quot;,&#10;	txnstate: &quot;Start Log&quot;&#10;	&#10;	&#10;}]" />
+		<apikit:router config-ref="api-config" />
 		<error-handler ref="global-errorError_Handler" />
     </flow>
     <flow name="api.raml-console">
@@ -27,43 +28,27 @@
 		<error-handler ref="global-errorError_Handler" />
     </flow>
     <flow name="get:\health-check:api.raml-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
+		<flow-ref doc:name="Flow Reference initialize-request-data" doc:id="c1528dfc-db00-469d-ae86-e03f3adea476" name="initialize-request-data" />
+		<logger level="INFO" doc:name="start Logger" doc:id="9a9b7786-46b1-49cc-9c0f-deafa5d9d9b0" message="#[%dw 2.0&#10;output application/json indent = false&#10;---&#10;{&#10;	timestamp: vars.requestVar.startTime,&#10;	transactionId: vars.requestVar.headers.'x-abc-msgid',&#10;	appName: app.name,&#10;	flowName: flow.name,&#10;	businessProcessName: &quot;HealthCheck&quot;,&#10;	originatingApplication: &quot;External system&quot;,&#10;	destinationApplication: &quot;NA&quot;,&#10;	customerIdentifier: &quot;NA&quot;,&#10;	txnState: &quot;Start Log&quot;&#10;	&#10;	&#10;}]" />
+		<ee:transform doc:name="Transform Message1" doc:id="eced44b0-485b-4eba-b168-f73027ef718f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  msg: "failed operation",
-  code: 400,
-  eventId: "weduwedh-wdsah-wdwdds-edd-sqs",
-  error: {
-    "type": "BAD-REQUEST",
-    title: "Invalid Request",
-    details: "The input contains invalid data"
-  }
+	msg: "Success",
+	code: 200
 }]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End Logger" doc:id="3967df22-c741-4275-affc-4c2a5c866e30" message='#[%dw 2.0&#10;output application/json indent = false&#10;---&#10;{&#10;	timestamp: (now() &gt;&gt; "IST") as String {format: "yyyy-MM-dd hh:mm:ss"},&#10;	transactionId: vars.requestVar.startTime as LocalDateTime {format: "yyyy-MM-dd HH:mm:ss.SSS"},&#10;	appName: app.name,&#10;	flowName: flow.name,&#10;	businessProcessName: "HealthCheck",&#10;	originatingApplication: "External system",&#10;	destinationApplication: "NA",&#10;	customerIdentifier: "NA",&#10;	txnState: "End Log",&#10;	ExecutionTime: now() as LocalDateTime {format: "yyyy-MM-dd HH:mm:ss.SSS"} - vars.requestVar.startTime as LocalDateTime {format: "yyyy-MM-dd HH:mm:ss.SSS"}}]' />
 		<error-handler ref="global-errorError_Handler_flow" />
     </flow>
     <flow name="get:\policies:api.raml-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  msg: "failed operation",
-  code: 400,
-  eventId: "weduwedh-wdsah-wdwdds-edd-sqs",
-  error: {
-    "type": "BAD-REQUEST",
-    title: "Invalid Request",
-    details: "The input contains invalid data"
-  }
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="Flow Reference initialize-request-data" doc:id="3cd27384-1afd-4fa1-9bb3-353cec7bed24" name="initialize-request-data" />
+		<logger level="INFO" doc:name="start Logger" doc:id="d32a57ef-334b-41ea-9571-04727dd3a4c7" message="#[%dw 2.0&#10;output application/json indent = false&#10;---&#10;{&#10;	timestamp: vars.requestVar.startTime,&#10;	transactionId: vars.requestVar.headers.'x-abc-msgid',&#10;	appName: app.name,&#10;	flowName: flow.name,&#10;	businessProcessName: &quot;Policy&quot;,&#10;	originatingApplication: &quot;FrontEnd&quot;,&#10;	destinationApplication: &quot;DataBase&quot;,&#10;	customerIdentifier: &quot;NA&quot;,&#10;	txnStatae: &quot;Start Log&quot;&#10;	&#10;	&#10;}]" />
+		<flow-ref doc:name="Flow Reference" doc:id="8ba6af48-ea54-4184-a147-e4a03faa49c6" name="get-policy-list-implFlow" />
+		<logger level="INFO" doc:name="End Logger" doc:id="0b091b82-e775-4976-96bb-e381e988e8ae" message="#[%dw 2.0&#10;output application/json indent = false&#10;---&#10;{&#10;	timestamp: (now() &gt;&gt; &quot;IST&quot;) as String {format: &quot;yyyy-MM-dd hh:mm:SS&quot;},&#10;	transactionId: vars.requestVar.headers.'x-abc-msgid',&#10;	appName: app.name,&#10;	flowName: flow.name,&#10;	businessProcessName: &quot;Policy&quot;,&#10;	originatingApplication: &quot;FrontEnd&quot;,&#10;	destinationApplication: &quot;DataBase&quot;,&#10;	customerIdentifier: &quot;NA&quot;,&#10;	txnState: &quot;End Log&quot;&#10;	//executionTime: ((now() &gt;&gt; &quot;IST&quot;) as String {format: &quot;YYYY-MM-DD hh:mm:SS&quot;})&#10;	&#10;	&#10;}]" />
 		<error-handler ref="global-errorError_Handler_flow" />
     </flow>
 </mule>
