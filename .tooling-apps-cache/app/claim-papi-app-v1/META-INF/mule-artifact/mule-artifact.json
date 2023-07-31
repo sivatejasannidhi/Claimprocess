@@ -1,0 +1,37 @@
+{
+  "configs": [
+    "implementation/get-policy-list-impl.xml",
+    "common/config.xml",
+    "common/global-error.xml",
+    "common/common-logic.xml",
+    "api.raml.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:claim-papi-app-v1:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.4.0",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "api.raml.xml",
+        "common/common-logic.xml",
+        "common/config.xml",
+        "common/global-error.xml",
+        "implementation/get-policy-list-impl.xml",
+        "log4j2.xml",
+        "properties/dev.yaml",
+        "properties/ppe.yaml",
+        "properties/prd.yaml",
+        "properties/sit.yaml",
+        "properties/uat.yaml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}
